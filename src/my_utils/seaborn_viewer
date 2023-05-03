@@ -1,0 +1,14 @@
+import numpy as np
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
+
+sns.set()
+words_x = ["hello", ",", "world", "."]
+words_y = words_x
+uniform_data = np.random.rand(4,4)
+
+ax = sns.heatmap(uniform_data)
+ax.set_xticklabels(words_x, rotation = 45)
+ax.set_yticklabels(words_y, rotation=0)
+plt.show()
