@@ -214,12 +214,12 @@ if __name__ == "__main__":
     jlr = JSONLineReader()
     # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     device = args.device
-    bert_path = '/home/hunan/bert_weights/ms-marco-MiniLM-L-12-v2'
+    bert_path = './bert_weights/ms-marco-MiniLM-L-12-v2'
     rerank_model = AutoModelForSequenceClassification.from_pretrained(bert_path)
     rerank_model.to(device)
     rerank_tokenizer = AutoTokenizer.from_pretrained(bert_path)
     rerank_model.eval()
-    with open("{0}/{1}.pages.refined_claim.s1.t1.jsonl".format(args.data_path, args.split),"r") as f, open("{0}/{1}.pages.refined_claim.s1.t1.{2}.jsonl".format(args.data_path, args.split, args.max_page,args.max_rerank), "w+") as out_file:
+    with open("{0}/{1}.pages.p{2}.jsonl".format(args.data_path, args.split, args.max_page),"r") as f, open("{0}/{1}.pages.p{2}.r{3}.jsonl".format(args.data_path, args.split, args.max_page,args.max_rerank), "w+") as out_file:
         lines = jlr.process(f)
 
         queries, passages, pages = preprocess(lines)
