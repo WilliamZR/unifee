@@ -71,7 +71,7 @@ def evidence_coverage(args):
     else:
         annotation_by_id = {i: el for i, el in enumerate(annotation_processor) if el.has_evidence()}
 
-    with open('{0}/{1}.roberta_sent.table.not_precomputed.p{2}.s{3}.t{4}.jsonl'.format('data',
+    with open('{0}/{1}.roberta.not_precomputed.p{2}.s{3}.t{4}.jsonl'.format('data',
         args.split, args.max_page, args.max_sent, args.max_tabs),'r') as f:
         for idx,line in enumerate(f): 
             if idx == 0: 
@@ -113,8 +113,8 @@ def evidence_coverage(args):
             else:
                 coverage_ele = len(set(docs_predicted) & set(docs_gold)) / len(docs_gold)
                 coverage_all.append(coverage_ele)
-    print(average(coverage))  # 0.5592654373069391
-    print(average(coverage_all))  # 0.5508624171117806
+    print(average(coverage)) 
+    print(average(coverage_all)) 
 
 
 if __name__ == "__main__":
@@ -134,7 +134,4 @@ if __name__ == "__main__":
     # evidence_mrr(args)
     evidence_coverage(args)
 
-# PYTHONPATH=src python src/baseline/retriever/eval_combined_retriever.py --split dev --max_page 5 --max_sent 5 --max_tabs 3
-# Evidence coverage...
-# 0.6927645944633607
-# 0.6816333820813999
+

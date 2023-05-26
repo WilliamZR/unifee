@@ -72,8 +72,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--split', type=str)
     parser.add_argument('--input_path', type=str)
-    parser.add_argument('--max_page', type=int, default=1)
-    parser.add_argument('--max_sent', type=int, default=1)
+    parser.add_argument('--max_page', type=int, default=5)
+    parser.add_argument('--max_sent', type=int, default=5)
     parser.add_argument('--all', type=int, default=0)
     args = parser.parse_args()
     split = args.split
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     # q_all = 0
     # score = 0
     # score_all = 0
-    in_path = 'data/{0}.sentences.not_precomputed.p{1}.s{2}.jsonl'.format(split, args.max_page, args.max_sent)
+    in_path = 'data/{0}.sentences.roberta.p{1}.s{2}.jsonl'.format(split, args.max_page, args.max_sent)
 
     coverage = []
     coverage_all = []
@@ -104,8 +104,8 @@ if __name__ == "__main__":
             if len(docs_gold) == 0:
                 continue
             # print(docs_gold)
-            docs_predicted =  [t[0] + '_' + t[1].replace('s_', 'sentence_') for t in js['predicted_sentences'][:5]]
-            # docs_predicted =  [t[0] + '_' + t[1].replace('s_', 'sentence_') for t in js['predicted_sentences']]
+            docs_predicted = js['predicted_sentences']
+
             if anno.get_verdict() in ['SUPPORTS', 'REFUTES']:
                 coverage_ele = len(set(docs_predicted) & set(docs_gold)) / len(docs_gold)
                 coverage.append(coverage_ele)

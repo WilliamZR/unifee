@@ -1,12 +1,9 @@
 import argparse
 import jsonlines
 import os
-import sys
-sys.path.append('/home/hunan/feverous/mycode/src/')
 from feverous_scorer import feverous_score
 from my_utils import compute_metrics
 
-os.chdir("/home/hunan/feverous/mycode")
 
 if __name__ == "__main__":
 

@@ -42,8 +42,9 @@ def main():
     args = get_parser().parse_args()
     print(args)
     args.db = FeverousDB(args.wiki_path)
+    args.output_path = 'data/dev.allcell.scores.jsonl'
 
-    valid_data = build_dataset_with_all_cells('dev', args, cache_file = 'data/test_all_cells.jsonl')
+    valid_data = build_dataset_with_all_cells('dev', args, cache_file = 'data/dev_all_cells.jsonl')
     val_dataset = FusionRetrievalDataset(valid_data, args)
     print(len(val_dataset))
     val_dataloader = DataLoader(val_dataset, batch_size = 1, collate_fn=collate_fn, shuffle=False)

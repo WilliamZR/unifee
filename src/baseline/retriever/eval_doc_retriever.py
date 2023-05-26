@@ -1,15 +1,15 @@
+import sys
 import argparse
 import json
-from tqdm import tqdm
 from utils.annotation_processor import AnnotationProcessor
 import unicodedata
-from cleantext import clean
+from cleantext.clean import clean
 from urllib.parse import unquote
-import sys
 
+import os
+# os.chdir("{dir}/DCUF_code")
 
 def average(list):
-    print(len(list))
     return float(sum(list) / len(list))
 
 
@@ -50,23 +50,21 @@ def page_coverage(args):
     coverage_evi_set = []
     tt_doc_num = 0
 
-    args.input_path = f"data/{args.split}.pages.p5.jsonl"
- 
+    args.input_path = "data/{1}.pages.p{2}.jsonl".format(args.input_path, split,k)
+    # args.input_path = f"data/{args.split}.pages.bm25.p10.jsonl"
+    # args.input_path = f"data/{args.split}.pages.reranker.p5.jsonl"
+
     with open(args.input_path,"r") as f:
         for idx,line in enumerate(f):
-            if idx == 0:
-                continue
             js = json.loads(line)
             id = js['id']
             anno = annotation_by_id[id]
-            if anno.get_evidence_type()[0].name == 'SENTENCE':
-                continue
             docs_gold = list(set([clean_title(t) for t in anno.get_titles(flat=True)]))
 
             #去除纯数字条目
             #js['predicted_pages'] = [pg for pg in js['predicted_pages'] if not pg[0].isdigit()]
 
-            docs_predicted = [clean_title(t[0]) for t in js['predicted_pages']]
+            docs_predicted = [clean_title(t[0]) for t in js['predicted_pages'][:5]]
             if anno.get_verdict() in ['SUPPORTS', 'REFUTES']:
                 coverage_ele = len(set(docs_predicted) & set(docs_gold)) / len(docs_gold)
                 coverage.append(coverage_ele)
@@ -147,10 +145,10 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--anno_path', type=str)
-    parser.add_argument('--split', type=str, default='dev')
+    parser.add_argument('--split', type=str, default="dev")
     parser.add_argument('--input_path', type=str)
     parser.add_argument('--mode', type=str)
-    parser.add_argument('--count', type=int, default=1)
+    parser.add_argument('--count', type=int, default=5)
     args = parser.parse_args()
     split = args.split
     k = args.count
@@ -186,3 +184,14 @@ if __name__ == "__main__":
                         score_all+= (1/(docs_predicted.index(p)+1)) #mean reciprocal rank
     print(score/q)
     print(score_all/q_all)
+    # baseline @ 5
+    # 0.6996797040646006
+    # 0.6932425010561892
+
+    # re-ranking code @ 5
+    # 0.6995443677538684
+    # 0.6931157583438953
+
+    # re-ranking code @150
+    # 0.9146366220056845
+    # 0.911261089987326

@@ -55,10 +55,9 @@ if __name__ == '__main__':
     parser.add_argument('--split', type = str, default= 'dev')
     parser.add_argument('--cell_threshold', type = float, default = 0.0)
     parser.add_argument('--sent_threshold', type = float, default= 0.0)
-    parser.add_argument('--input_path', type = str)
     args = parser.parse_args()
     print(args)
-    raw_data = load_pkl_data('{0}/{1}.allcells.scores.jsonl'.format(args.input_path, args.split))
+    raw_data = load_pkl_data('data/{1}.allcells.scores.jsonl'.format(args.input_path, args.split))
 
     input_file = '{0}/{1}.combined.not_precomputed.p5.s5.t3.jsonl'.format(args.input_path, args.split)
 

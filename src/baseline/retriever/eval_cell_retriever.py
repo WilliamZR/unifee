@@ -1,4 +1,7 @@
 import argparse
+import sys
+sys.path.append('/home/wuzr/unifee/src/')
+
 import json
 from tqdm import tqdm
 from utils.annotation_processor import AnnotationProcessor, EvidenceType
@@ -8,6 +11,7 @@ from urllib.parse import unquote
 from utils.prepare_model_input import get_wikipage_by_id, init_db
 
 import os
+os.chdir("/home/wuzr/unifee")
 import pandas as pd
 # os.chdir("../../../")
 
@@ -67,19 +71,19 @@ def evidence_coverage(args):
     coverage_all = []
     annotation_processor = AnnotationProcessor('data/{}.jsonl'.format(args.split))
     if args.all == 0:
-        annotation_by_id = {i: el for i, el in enumerate(annotation_processor) if
+        annotation_by_id = {el.id: el for i, el in enumerate(annotation_processor) if
                             el.has_evidence() and el.get_evidence_type(flat=True) == EvidenceType.SENTENCE}
     else:
-        annotation_by_id = {i: el for i, el in enumerate(annotation_processor) if el.has_evidence()}
+        annotation_by_id = {el.id: el for i, el in enumerate(annotation_processor) if el.has_evidence()}
 
     gold_cell_num = []
     pred_cell_num = []
-    with open('data/{}.roberta.graph.p5.s5.t3.cells.jsonl'.format(args.split), 'r') as f:
+    with open('data/{}.fusion.results.jsonl'.format(args.split), 'r') as f:
         for idx, line in enumerate(f):
             if idx == 0:
                 continue
             js = json.loads(line)
-            id = idx  # js['id']
+            id = js['id']
             if id not in annotation_by_id:
                 continue
             anno = annotation_by_id[id]
@@ -145,7 +149,6 @@ def evidence_coverage_path(pred_path, gold_path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_file', type=str)
     parser.add_argument('--max_page', type=int, default=5)
     parser.add_argument('--max_sent', type=int, default=5)
     parser.add_argument('--max_tabs', type=int, default=3)
