@@ -1,5 +1,11 @@
 Code for [Unified Evidence Extraction for Fact Verification over Tables and Texts](https://aclanthology.org/2023.eacl-main.82/) at EACL2023.
 
+## Update
+Results for each evidence extraction is now available!
+
+You can download them at [google drive link](https://drive.google.com/drive/folders/1FsM2i9qKbzN1DgtMeAOyt9yTbsxtVO8a?usp=sharing).
+
+
 ## Shared Task
 The majority of the [base-line code and its documentation](https://github.com/Raldir/FEVEROUS) remains intact. We extend it by adding scripts to incorporate neural re-ranking models.
 
@@ -59,7 +65,7 @@ PYTHONPATH=src python src/baseline/retriever/table_tfidf_drqa.py --db data/fever
 
 check the results of table evidence
 ```
-PYTHONPATH=src python src/baseline/retriever/eval_tab_retriever.py --max_page 5 --max_tabs 3 --split {split} --input_path {input_path}
+PYTHONPATH=src python src/baseline/retriever/eval_tab_retriever.py --max_page 5 --max_tabs 3 --split {split} 
 ```
 
 
@@ -85,17 +91,17 @@ PYTHONPATH=src python src/my_methods/graph_evidence_extraction/all_cell_util.py 
 
 Train
 ```
-train_fusion_col_extractor.py --lr 1e-6 --batch_size 4 --print_freq 100   --use_entity_edges --max_epoch 3 --use_all_cells 
+PYTHONPATH=src python src/my_methods/graph_evidence_extraction/train_fusion_col_extractor.py --lr 1e-6 --batch_size 4 --print_freq 100   --use_entity_edges --max_epoch 3 --use_all_cells 
 ```
 
 Run model on dataset and save scores to output_path
 ```
-rerank_evidence.py  --output_path {} --model_load_path {} --use_entity_edges
+PYTHONPATH=src python src/my_methods/graph_evidence_extraction/rerank_evidence.py  --output_path {} --model_load_path {} --use_entity_edges
 ```
 
 Retrieve evidence set with threshold from computed score
 ```
-python evidence_retrieval_with_scores.py --split {} --cell_threshold {} --sent_threshold {}
+PYTHONPATH=src python src/my_methods/graph_evidence_extraction/evidence_retrieval_with_scores.py --split {} --cell_threshold {} --sent_threshold {}
 ```
 
 Verdict Prediction please refer to our previous work [DCUF](https://github.com/lanlanabcd/dual_channel_feverous)
